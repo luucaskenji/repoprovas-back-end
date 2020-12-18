@@ -12,5 +12,7 @@ const examsController = require('./controllers/examsController');
 app.get('/api/courses', coursesController.getAll);
 app.get('/api/:courseId/professors', professorsController.getCourseProfessors);
 app.post('/api/new-exam', examsController.postExam);
+app.get('/api/exams', examsController.getAll);
+app.get('/api/professors', professorsController.getAll);
 
 module.exports = { app };

@@ -6,6 +6,12 @@ class Professor {
         this.name = name;
     }
 
+    static async getAllFromDB() {
+        const response = await dbConnection.query('SELECT * FROM professors');
+
+        return response.rows.map(p => new Professor(p.id, p.name));
+    }
+
     static async getProfessorsByCourseId(courseId) {
         const results = await dbConnection.query(`
             SELECT professors.name, professors.id
