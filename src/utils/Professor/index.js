@@ -1,13 +1,14 @@
 const { dbConnection } = require("../../database");
 
 class Professor {
-    constructor(name) {
+    constructor(id, name) {
+        this.id = id;
         this.name = name;
     }
 
     static async getProfessorsByCourseId(courseId) {
         const results = await dbConnection.query(`
-            SELECT professors.name
+            SELECT professors.name, professors.id
             FROM professors
             JOIN courses_professors ON professors.id = courses_professors."professorId"
             JOIN courses ON courses.id = courses_professors."courseId"
@@ -15,7 +16,7 @@ class Professor {
         `,
         [courseId]);
 
-        return results.rows.map(p => new Professor(p.name));
+        return results.rows.map(p => new Professor(p.id, p.name));
     }
 }
 
