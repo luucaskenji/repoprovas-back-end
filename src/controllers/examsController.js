@@ -13,15 +13,30 @@ async function postExam(req, res) {
     courseId = parseInt(courseId);
     professorId = parseInt(professorId);
 
-    let newExam;
     try {
-        newExam = await Exam.insertExamIntoDB(url, courseId, professorId, semester, type);
+        await Exam.insertExamIntoDB(url, courseId, professorId, semester, type);
     }
-    catch(err) {
+    catch {
         return res.status(500).send('Erro interno no servidor');
     }
 
-    return res.status(201).send(newExam);
+    return res.sendStatus(201);
 }
 
-module.exports = { postExam };
+async function getProfessorExams(req, res) {
+    let { professorId } = req.params;
+    
+    if (!professorId) return res.status(400).send('Dados inválidos')
+
+    let exams
+    try {
+        exams = await Exam.getByProfessorId(professorId);
+    }
+    catch {
+        return res.status(500).send('Erro interno no servidor');
+    }
+
+    return res.status(200).send(exams);
+}
+
+module.exports = { postExam, getProfessorExams };
