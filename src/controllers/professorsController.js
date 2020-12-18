@@ -3,6 +3,8 @@ const { Professor } = require('../utils');
 async function getCourseProfessors(req, res) {
     const { courseId } = req.params;
 
+    if (!courseId) return res.status(400).send('Dados inválidos');
+
     let professors;
     try {
         professors = await Professor.getProfessorsByCourseId(courseId);
