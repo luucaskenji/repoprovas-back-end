@@ -19,16 +19,14 @@ class Exam {
         );
     }
 
-    static async getByProfessorId(professorId) {
+    static async getAll() {
         const results = await dbConnection.query(
             `
                 SELECT exams.id, exams.url, courses.name AS course, exams.semester, exams.type, professors.name AS professor
                 FROM exams
                 JOIN courses ON courses.id = exams."courseId"
                 JOIN professors ON professors.id = exams."professorId"
-                WHERE "professorId" = $1;
-            `,
-            [professorId]
+            `
         );
 
         return results.rows.map(e => new Exam(e.id, e.url, e.course, e.professor, e.semester, e.type ))

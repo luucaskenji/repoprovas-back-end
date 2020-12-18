@@ -1,6 +1,18 @@
 const { sanitize } = require('../helpers/stringStripHtml');
 const { Exam } = require('../utils');
 
+async function getAll(req, res) {
+    let exams;
+    try {
+        exams = await Exam.getAll();
+    }
+    catch {
+        return res.status(500).send('Erro interno no servidor');
+    }
+
+    return res.status(200).send(exams);
+}
+
 async function postExam(req, res) {
     let { url, courseId, professorId, semester, type } = req.body;
 
@@ -23,20 +35,4 @@ async function postExam(req, res) {
     return res.sendStatus(201);
 }
 
-async function getProfessorExams(req, res) {
-    let { professorId } = req.params;
-    
-    if (!professorId) return res.status(400).send('Dados inválidos')
-
-    let exams
-    try {
-        exams = await Exam.getByProfessorId(professorId);
-    }
-    catch {
-        return res.status(500).send('Erro interno no servidor');
-    }
-
-    return res.status(200).send(exams);
-}
-
-module.exports = { postExam, getProfessorExams };
+module.exports = { postExam, getAll };

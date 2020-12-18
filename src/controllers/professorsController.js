@@ -1,5 +1,17 @@
 const { Professor } = require('../utils');
 
+async function getAll(req, res) {
+    let professors;
+    try {
+        professors = await Professor.getAllFromDB();
+    }
+    catch {
+        return res.status(500).send('Erro interno no servidor');
+    }
+
+    return res.status(200).send(professors);
+}
+
 async function getCourseProfessors(req, res) {
     const { courseId } = req.params;
 
@@ -16,4 +28,4 @@ async function getCourseProfessors(req, res) {
     return res.status(200).send(professors);
 }
 
-module.exports = { getCourseProfessors }
+module.exports = { getCourseProfessors, getAll }
